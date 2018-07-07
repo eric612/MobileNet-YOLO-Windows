@@ -89,6 +89,6 @@ void AdamSolver<Dtype>::ComputeUpdateValue(int param_id, Dtype rate) {
 }
 
 INSTANTIATE_CLASS(AdamSolver);
-REGISTER_SOLVER_CLASS(Adam);
+//REGISTER_SOLVER_CLASS(Adam);
 
 }  // namespace caffe

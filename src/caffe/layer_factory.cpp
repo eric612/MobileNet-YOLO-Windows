@@ -8,15 +8,31 @@
 
 #include "caffe/layer.hpp"
 #include "caffe/layer_factory.hpp"
+#include "caffe/layers/annotated_data_layer.hpp"
+#include "caffe/layers/batch_norm_layer.hpp"
+#include "caffe/layers/bias_layer.hpp"
+#include "caffe/layers/concat_layer.hpp"
 #include "caffe/layers/conv_layer.hpp"
+#include "caffe/layers/detection_evaluate_layer.hpp"
+#include "caffe/layers/flatten_layer.hpp"
+#include "caffe/layers/input_layer.hpp"
 #include "caffe/layers/lrn_layer.hpp"
 #include "caffe/layers/pooling_layer.hpp"
 #include "caffe/layers/relu_layer.hpp"
+#include "caffe/layers/reshape_layer.hpp"
+#include "caffe/layers/scale_layer.hpp"
 #include "caffe/layers/sigmoid_layer.hpp"
 #include "caffe/layers/softmax_layer.hpp"
+#include "caffe/layers/softmax_loss_layer.hpp"
+#include "caffe/layers/smooth_L1_loss_layer.hpp"
 #include "caffe/layers/tanh_layer.hpp"
+#include "caffe/layers/normalize_layer.hpp"
+#include "caffe/layers/sigmoid_cross_entropy_loss_layer.hpp"
+#include "caffe/layers/region_loss_layer.hpp"
+#include "caffe/layers/yolo_detection_output_layer.hpp"
 #include "caffe/proto/caffe.pb.h"
-
+#include "caffe/layers/reorg_layer.hpp"
+#include "caffe/layers/depthwise_conv_layer.hpp"
 #ifdef USE_CUDNN
 #include "caffe/layers/cudnn_conv_layer.hpp"
 #include "caffe/layers/cudnn_lcn_layer.hpp"
@@ -105,6 +121,142 @@ LayerRegisterer<Dtype>::LayerRegisterer(
 
 INSTANTIATE_CLASS(LayerRegistry);
 INSTANTIATE_CLASS(LayerRegisterer);
+/////////////////////////////////////////////////////
+
+// Get Reorg layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetReorgLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new ReorgLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(Reorg, GetReorgLayer);
+
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetSigmoidCrossEntropyLossLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new SigmoidCrossEntropyLossLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(SigmoidCrossEntropyLoss, GetSigmoidCrossEntropyLossLayer);
+
+///////////////////////////////////////////////////////
+// Get Flatten layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetAnnotatedDataLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new AnnotatedDataLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(AnnotatedData, GetAnnotatedDataLayer);
+
+
+// Get BatchNorm layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetBatchNormLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new BatchNormLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(BatchNorm, GetBatchNormLayer);
+
+
+// Get Bias layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetBiasLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new BiasLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(Bias, GetBiasLayer);
+
+
+// Get Flatten layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetConcatLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new ConcatLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(Concat, GetConcatLayer);
+
+
+// Get DetectionEvaluate layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetDetectionEvaluateLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new DetectionEvaluateLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(DetectionEvaluate, GetDetectionEvaluateLayer);
+
+
+// Get Flatten layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetFlattenLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new FlattenLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(Flatten, GetFlattenLayer);
+
+
+// Get input layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetInputLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new InputLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(Input, GetInputLayer);
+
+
+
+// Get DetectionOutput layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetYoloDetectionOutputLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new YoloDetectionOutputLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(YoloDetectionOutput, GetYoloDetectionOutputLayer);
+
+
+
+// Get RegionLoss layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetRegionLossLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new RegionLossLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(RegionLoss, GetRegionLossLayer);
+// Get Permute layer according to engine.
+
+
+
+
+// Get Reshape layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetReshapeLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new ReshapeLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(Reshape, GetReshapeLayer);
+
+
+// Get Scale layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetScaleLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new ScaleLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(Scale, GetScaleLayer);
+
+
+// Get SoftmaxWithLoss layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetSoftmaxWithLossLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new SoftmaxWithLossLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(SoftmaxWithLoss, GetSoftmaxWithLossLayer);
+
+
+// Get SmoothL1Loss layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetSmoothL1LossLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new SmoothL1LossLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(SmoothL1Loss, GetSmoothL1LossLayer);
+
+
+
+
+// Get normalize layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetNormalizeLayer(const LayerParameter& param) {
+	return shared_ptr<Layer<Dtype> >(new NormalizeLayer<Dtype>(param));
+}
+REGISTER_LAYER_CREATOR(Normalize, GetNormalizeLayer);
+
+//////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 // Get convolution layer according to engine.
 template <typename Dtype>
@@ -146,6 +298,48 @@ shared_ptr<Layer<Dtype> > GetConvolutionLayer(
 
 REGISTER_LAYER_CREATOR(Convolution, GetConvolutionLayer);
 
+
+// Get convolution layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetDepthwiseConvolutionLayer(
+	const LayerParameter& param) {
+	ConvolutionParameter conv_param = param.convolution_param();
+	ConvolutionParameter_Engine engine = conv_param.engine();
+#ifdef USE_CUDNN
+	bool use_dilation = false;
+	for (int i = 0; i < conv_param.dilation_size(); ++i) {
+		if (conv_param.dilation(i) > 1) {
+			use_dilation = true;
+		}
+	}
+#endif
+	if (engine == ConvolutionParameter_Engine_DEFAULT) {
+		engine = ConvolutionParameter_Engine_CAFFE;
+#ifdef USE_CUDNN
+		if (!use_dilation) {
+			engine = ConvolutionParameter_Engine_CUDNN;
+		}
+#endif
+	}
+	if (engine == ConvolutionParameter_Engine_CAFFE) {
+		return shared_ptr<Layer<Dtype> >(new DepthwiseConvolutionLayer<Dtype>(param));
+#ifdef USE_CUDNN
+	}
+	else if (engine == ConvolutionParameter_Engine_CUDNN) {
+		if (use_dilation) {
+			LOG(FATAL) << "CuDNN doesn't support the dilated convolution at Layer "
+				<< param.name();
+		}
+		return shared_ptr<Layer<Dtype> >(new CuDNNConvolutionLayer<Dtype>(param));
+#endif
+	}
+	else {
+		LOG(FATAL) << "Layer " << param.name() << " has unknown engine.";
+		throw;  // Avoids missing return warning
+	}
+}
+
+REGISTER_LAYER_CREATOR(DepthwiseConvolution, GetDepthwiseConvolutionLayer);
 // Get pooling layer according to engine.
 template <typename Dtype>
 shared_ptr<Layer<Dtype> > GetPoolingLayer(const LayerParameter& param) {
@@ -222,6 +416,30 @@ shared_ptr<Layer<Dtype> > GetLRNLayer(const LayerParameter& param) {
 
 REGISTER_LAYER_CREATOR(LRN, GetLRNLayer);
 
+// Get relu layer according to engine.
+template <typename Dtype>
+shared_ptr<Layer<Dtype> > GetReLU6Layer(const LayerParameter& param) {
+	ReLUParameter_Engine engine = param.relu_param().engine();
+	if (engine == ReLUParameter_Engine_DEFAULT) {
+		engine = ReLUParameter_Engine_CAFFE;
+#ifdef USE_CUDNN
+		engine = ReLUParameter_Engine_CUDNN;
+#endif
+	}
+	if (engine == ReLUParameter_Engine_CAFFE) {
+		return shared_ptr<Layer<Dtype> >(new ReLULayer<Dtype>(param));
+#ifdef USE_CUDNN
+	}
+	else if (engine == ReLUParameter_Engine_CUDNN) {
+		return shared_ptr<Layer<Dtype> >(new CuDNNReLULayer<Dtype>(param));
+#endif
+	}
+	else {
+		LOG(FATAL) << "Layer " << param.name() << " has unknown engine.";
+		throw;  // Avoids missing return warning
+	}
+}
+REGISTER_LAYER_CREATOR(ReLU6, GetReLU6Layer);
 // Get relu layer according to engine.
 template <typename Dtype>
 shared_ptr<Layer<Dtype> > GetReLULayer(const LayerParameter& param) {

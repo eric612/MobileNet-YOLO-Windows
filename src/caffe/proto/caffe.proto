@@ -615,7 +615,7 @@ message TransformationParameter {
   // Force the decoded image to have 1 color channels.
   optional bool force_gray = 7 [default = false];
   // Resize policy
-  optional ResizeParameter resize_param = 8;
+  repeated ResizeParameter resize_param = 8;
   // Noise policy
   optional NoiseParameter noise_param = 9;
   // Distortion policy
