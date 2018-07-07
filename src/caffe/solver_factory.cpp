@@ -2,6 +2,8 @@
 #include <vector>
 
 #include "caffe/solver_factory.hpp"
+#include "caffe/sgd_solvers.hpp"
+
 
 namespace caffe {
 
@@ -68,7 +70,52 @@ SolverRegisterer<Dtype>::SolverRegisterer(
   SolverRegistry<Dtype>::AddCreator(type, creator);
 }
 
+
 INSTANTIATE_CLASS(SolverRegistry);
 INSTANTIATE_CLASS(SolverRegisterer);
+
+
+// SGD
+template <typename Dtype>
+Solver<Dtype>* CreatorSGDSolver(const SolverParameter& param){                                                                            \
+    return new SGDSolver<Dtype>(param);
+}
+REGISTER_SOLVER_CREATOR(sgd, CreatorSGDSolver);
+
+// AdaDelt
+template <typename Dtype>
+Solver<Dtype>* CreatorAdaDeltaSolver(const SolverParameter& param){                                                                            \
+    return new AdaDeltaSolver<Dtype>(param);
+}
+REGISTER_SOLVER_CREATOR(AdaDelta, CreatorAdaDeltaSolver);
+
+// AdaGrad
+template <typename Dtype>
+Solver<Dtype>* CreatorAdaGradSolver(const SolverParameter& param){                                                                            \
+    return new AdaGradSolver<Dtype>(param);
+}
+REGISTER_SOLVER_CREATOR(AdaGrad, CreatorAdaGradSolver);
+
+// Adam
+template <typename Dtype>
+Solver<Dtype>* CreatorAdamSolver(const SolverParameter& param){                                                                            \
+    return new AdamSolver<Dtype>(param);
+}
+REGISTER_SOLVER_CREATOR(Adam, CreatorAdamSolver);
+
+// Nesterov
+template <typename Dtype>
+Solver<Dtype>* CreatorNesterovSolver(const SolverParameter& param){                                                                            \
+    return new NesterovSolver<Dtype>(param);
+}
+REGISTER_SOLVER_CREATOR(Nesterov, CreatorNesterovSolver);
+
+
+//RMSProp
+template <typename Dtype>
+Solver<Dtype>* CreatorRMSPropSolver(const SolverParameter& param){                                                                            \
+    return new RMSPropSolver<Dtype>(param);
+}
+REGISTER_SOLVER_CREATOR(RMSProp, CreatorRMSPropSolver);
 
 }  // namespace caffe

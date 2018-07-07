@@ -38,7 +38,7 @@ include(cmake/TargetResolvePrerequesites.cmake)
 
 # ---[ Options
 caffe_option(CPU_ONLY  "Build Caffe without CUDA support" OFF) # TODO: rename to USE_CUDA
-caffe_option(USE_CUDNN "Build Caffe with cuDNN library support" ON IF NOT CPU_ONLY)
+caffe_option(USE_CUDNN "Build Caffe with cuDNN library support" OFF IF NOT CPU_ONLY)
 caffe_option(USE_NCCL "Build Caffe with NCCL library support" OFF)
 if(MSVC)
   # default to static libs
@@ -100,8 +100,8 @@ configure_file(cmake/Templates/caffe_config.h.in "${PROJECT_BINARY_DIR}/caffe_co
 # ---[ Includes
 set(Caffe_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 set(Caffe_SRC_DIR ${PROJECT_SOURCE_DIR}/src)
-include_directories(${PROJECT_BINARY_DIR})
-
+include_directories(${Caffe_INCLUDE_DIR} ${PROJECT_BINARY_DIR})
+include_directories(BEFORE src) # This is needed for gtest.
 # ---[ Includes & defines for CUDA
 
 # cuda_compile() does not have per-call dependencies or include pathes

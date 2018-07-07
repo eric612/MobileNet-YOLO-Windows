@@ -41,8 +41,9 @@ typedef boost::function<SolverAction::Enum()> ActionCallback;
 template <typename Dtype>
 class Solver {
  public:
-  explicit Solver(const SolverParameter& param);
-  explicit Solver(const string& param_file);
+  explicit Solver(const SolverParameter& param,
+      const Solver* root_solver = NULL);
+  explicit Solver(const string& param_file, const Solver* root_solver = NULL);
   void Init(const SolverParameter& param);
   void InitTrainNet();
   void InitTestNets();
@@ -72,7 +73,7 @@ class Solver {
   inline const vector<shared_ptr<Net<Dtype> > >& test_nets() {
     return test_nets_;
   }
-  int iter() const { return iter_; }
+  int iter() { return iter_; }
 
   // Invoked at specific points during an iteration
   class Callback {
@@ -102,12 +103,15 @@ class Solver {
   string SnapshotToHDF5();
   // The test routine
   void TestAll();
-  void Test(const int test_net_id = 0);
+  void TestClassification(const int test_net_id = 0);
+  void TestDetection(const int test_net_id = 0);
   virtual void SnapshotSolverState(const string& model_filename) = 0;
   virtual void RestoreSolverStateFromHDF5(const string& state_file) = 0;
   virtual void RestoreSolverStateFromBinaryProto(const string& state_file) = 0;
   void DisplayOutputBlobs(const int net_id);
   void UpdateSmoothedLoss(Dtype loss, int start_iter, int average_loss);
+  /// Harmonize solver class type with configured proto type.
+  void CheckType(SolverParameter* param);
 
   SolverParameter param_;
   int iter_;
@@ -117,6 +121,10 @@ class Solver {
   vector<Callback*> callbacks_;
   vector<Dtype> losses_;
   Dtype smoothed_loss_;
+
+  // The root solver that holds root nets (actually containing shared layers)
+  // in data parallelism
+  const Solver* const root_solver_;
 
   // A function that can be set by a client of the Solver to provide indication
   // that it wants a snapshot saved and/or to exit early.
@@ -130,6 +138,30 @@ class Solver {
   float iterations_last_;
 
   DISABLE_COPY_AND_ASSIGN(Solver);
+};
+
+/**
+ * @brief Solver that only computes gradients, used as worker
+ *        for multi-GPU training.
+ */
+template <typename Dtype>
+class WorkerSolver : public Solver<Dtype> {
+ public:
+  explicit WorkerSolver(const SolverParameter& param,
+      const Solver<Dtype>* root_solver = NULL)
+      : Solver<Dtype>(param, root_solver) {}
+
+ protected:
+  void ApplyUpdate() {}
+  void SnapshotSolverState(const string& model_filename) {
+    LOG(FATAL) << "Should not be called on worker solver.";
+  }
+  void RestoreSolverStateFromBinaryProto(const string& state_file) {
+    LOG(FATAL) << "Should not be called on worker solver.";
+  }
+  void RestoreSolverStateFromHDF5(const string& state_file) {
+    LOG(FATAL) << "Should not be called on worker solver.";
+  }
 };
 
 }  // namespace caffe
