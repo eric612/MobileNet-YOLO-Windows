@@ -7,7 +7,7 @@ Network|mAP|Download|Download|NetScope
 MobileNet-YOLO-Lite|0.675|[train](models/MobileNet/mobilenet_iter_73000.caffemodel)|[deploy](https://github.com/eric612/MobileNet-YOLO/blob/master/models/yolov2/mobilenet_yolo_lite_deploy_iter_62000.caffemodel)|[graph](http://ethereon.github.io/netscope/#/gist/11229dc092ef68d3b37f37ce4d9cdec8)
 MobileNet-YOLO|0.709|[train](models/MobileNet/mobilenet_iter_73000.caffemodel)|[deploy](https://github.com/eric612/MobileNet-YOLO/blob/master/models/yolov2/mobilenet_yolo_deploy_iter_80000.caffemodel)|[graph](http://ethereon.github.io/netscope/#/gist/52f298d84f8fa4ebb2bb94767fa6ca88)
 
-Note : Training from linux version and test on windows version , the mAP of MobileNetYOLO-lite can only get 0.668
+Note : Training from linux version and test on windows version , the mAP of MobileNetYOLO-lite was 0.668 
 
 ## Linux Version
 
@@ -41,7 +41,7 @@ Download [yolov2 coco weights](https://pjreddie.com/darknet/yolov2/)
 
 Save at $caffe_root/models/convert 
 
-unmark "weights_to_prototxt.py" line 7,9,11 and mark line 8,10,12
+cd $caffe_root/models/convert 
 
 ```
 python weights_to_prototxt.py
@@ -59,7 +59,7 @@ examples\demo_darknet19.cmd
 
 ```
 > cd $caffe_root/
-> examples\demo_yolo_lite.cmd.cmd
+> examples\demo_yolo_lite.cmd
 ```
 
 If load success , you can see the image window like this 

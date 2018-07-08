@@ -4,12 +4,12 @@ import numpy as np
 
 #caffe.set_device(0)  # if we have multiple GPUs, pick the first one
 caffe.set_mode_cpu()
-#model_filename = 'darknet19_deploy.prototxt'
-model_filename = 'darknet19_conv23.prototxt'
-#yoloweight_filename = 'yolov2.weights'
-yoloweight_filename = 'darknet19_448.conv.23'
-#caffemodel_filename = 'darknet19_deploy.caffemodel'
-caffemodel_filename = 'darknet19_conv.caffemodel'
+model_filename = 'darknet19_deploy.prototxt'
+#model_filename = 'darknet19_conv23.prototxt'
+yoloweight_filename = 'yolov2.weights'
+#yoloweight_filename = 'darknet19_448.conv.23'
+caffemodel_filename = 'darknet19_deploy.caffemodel'
+#caffemodel_filename = 'darknet19_conv.caffemodel'
 print 'model file is ', model_filename
 print 'weight file is ', yoloweight_filename
 print 'output caffemodel file is ', caffemodel_filename
