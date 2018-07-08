@@ -10,7 +10,7 @@ gamma: 0.1
 weight_decay: 0.00005
 snapshot: 1000
 snapshot_prefix: "models/darknet/yolov2_deploy"
-solver_mode: GPU
+solver_mode: CPU
 debug_info: false
 snapshot_after_train: true
 test_initialization: false
@@ -19,7 +19,7 @@ average_loss: 10
 stepvalue: 40000
 stepvalue: 45000
 
-iter_size: 2
+iter_size: 4
 type: "sgd"
 eval_type: "detection"
 ap_version: "11point"

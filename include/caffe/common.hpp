@@ -168,8 +168,8 @@ class Caffe {
   inline static void set_solver_rank(int val) { Get().solver_rank_ = val; }
   inline static bool multiprocess() { return Get().multiprocess_; }
   inline static void set_multiprocess(bool val) { Get().multiprocess_ = val; }
-  inline static bool root_solver() { return Get().root_solver_; }
-  inline static void set_root_solver(bool val) { Get().root_solver_ = val; }
+  inline static bool root_solver() { return Get().solver_rank_ == 0; }
+
  protected:
 #ifndef CPU_ONLY
   cublasHandle_t cublas_handle_;
@@ -178,10 +178,12 @@ class Caffe {
   shared_ptr<RNG> random_generator_;
 
   Brew mode_;
+
+  // Parallel training
   int solver_count_;
   int solver_rank_;
   bool multiprocess_;
-  bool root_solver_;
+
  private:
   // The private constructor to avoid duplicate instantiation.
   Caffe();
