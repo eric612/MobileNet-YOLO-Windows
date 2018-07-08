@@ -40,6 +40,7 @@ The build step was the same as [MobileNet-SSD-windows](https://github.com/eric61
 Download [yolov2 coco weights](https://pjreddie.com/darknet/yolov2/)
 
 Save at $caffe_root/models/convert 
+
 unmark "weights_to_prototxt.py" line 7,9,11 and mark line 8,10,12
 
 ```
