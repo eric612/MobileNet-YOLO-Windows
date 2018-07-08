@@ -75,6 +75,7 @@ Unzip into $caffe_root/
 
 Please check the path exist "$caffe_root\examples\VOC0712\VOC0712_trainval_lmdb"
 
+Download [pre-trained weights](https://drive.google.com/file/d/141AVMm_h8nv3RpgylRyhUYb4w8rEguLM/view?usp=sharing) , and save at $caffe_root\model\convert
 
 ### Training Darknet YOLOv2 
 
