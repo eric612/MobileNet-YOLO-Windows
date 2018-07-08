@@ -57,6 +57,10 @@ examples\demo_darknet19.cmd
 
 ### MobilenetYOLO Demo
 
+Download [deploy model](https://github.com/eric612/MobileNet-YOLO/blob/master/models/yolov2/mobilenet_yolo_lite_deploy_iter_62000.caffemodel)
+
+Save at $caffe_root/models/yolov2
+
 ```
 > cd $caffe_root/
 > examples\demo_yolo_lite.cmd
